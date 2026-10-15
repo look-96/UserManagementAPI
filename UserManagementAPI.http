@@ -1,0 +1,55 @@
+@baseUrl = http://localhost:5146
+@token = replace-with-your-configured-token
+
+### List users (initially empty)
+GET {{baseUrl}}/api/users
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Create a user
+# @name createUser
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Jordan Lee",
+  "email": "jordan.lee@example.com",
+  "department": "IT"
+}
+
+### Get the created user
+GET {{baseUrl}}/api/users/{{createUser.response.body.$.id}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Update the created user
+PUT {{baseUrl}}/api/users/{{createUser.response.body.$.id}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Jordan Lee",
+  "email": "jordan.lee@example.com",
+  "department": "Human Resources"
+}
+
+### Delete the created user
+DELETE {{baseUrl}}/api/users/{{createUser.response.body.$.id}}
+Authorization: Bearer {{token}}
+
+### Invalid create request (expected 400)
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "J",
+  "email": "not-an-email",
+  "department": ""
+}
+
+### Missing/invalid token (expected 401)
+GET {{baseUrl}}/api/users
+Accept: application/json
+Authorization: Bearer invalid-token
